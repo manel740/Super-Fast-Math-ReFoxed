@@ -228,7 +228,7 @@ This project is developed for **NeoForge** using **Java 21**.
 ### Clone the repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/YOUR_REPOSITORY.git
+git clone https://github.com/manel740/Super-Fast-Math-ReFoxed.git
 cd YOUR_REPOSITORY
 ```
 
