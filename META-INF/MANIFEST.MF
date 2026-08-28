@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Mod-Loader: neoforge
+Loader-Version: 21.1.70
+Mod-Id: superfastmath
+Mod-Version: 0.0.5-1.21.1
+Mod-Name: SuperFastMath
+Mixin-Configs: superfastmath.mixins.json
+
