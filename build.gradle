@@ -1,9 +1,14 @@
 buildscript {
     repositories {
         mavenCentral()
-        maven { url = 'https://maven.neoforged.net/releases' }
-        maven { url = 'https://plugins.gradle.org/m2/' }
+        maven {
+            url = 'https://maven.neoforged.net/releases'
+        }
+        maven {
+            url = 'https://plugins.gradle.org/m2/'
+        }
     }
+
     dependencies {
         classpath "net.neoforged:moddev-gradle:2.0.144"
     }
@@ -17,7 +22,10 @@ group = project.maven_group
 
 repositories {
     mavenCentral()
-    maven { url = 'https://maven.neoforged.net/releases' }
+
+    maven {
+        url = 'https://maven.neoforged.net/releases'
+    }
 }
 
 dependencies {
@@ -29,29 +37,33 @@ java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(21)
     }
+
     withSourcesJar()
 }
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
-    options.compilerArgs << '-Xlint:unchecked' << '-Xlint:deprecation'
-    it.options.release = 21
+
+    options.compilerArgs << '-Xlint:unchecked'
+    options.compilerArgs << '-Xlint:deprecation'
+
+    options.release = 21
 }
 
 neoForge {
     version = project.neoforge_version
-    
+
     runs {
         client {
             type = 'client'
         }
+
         server {
             type = 'server'
         }
     }
 }
 
-// Agregar el JAR del proyecto al classpath de ejecución
 tasks.withType(JavaExec).configureEach {
     if (name.startsWith('runClient') || name.startsWith('runServer')) {
         classpath += files(jar.archiveFile.get().asFile)
@@ -61,27 +73,41 @@ tasks.withType(JavaExec).configureEach {
 
 jar {
     from("LICENSE") {
-        rename { "${it}_${project.base.archivesName.get()}" }
+        rename {
+            "${it}_${project.base.archivesName.get()}"
+        }
     }
+
     manifest {
         attributes(
-            'Mod-Loader': 'neoforge',
-            'Loader-Version': project.neoforge_version,
-            'Mod-Id': 'superfastmath',
-            'Mod-Version': project.version,
-            'Mod-Name': 'SuperFastMath',
-            'Mixin-Configs': 'superfastmath.mixins.json'
+                'Mod-Loader': 'neoforge',
+                'Loader-Version': project.neoforge_version,
+                'Mod-Id': 'superfastmath',
+                'Mod-Version': project.version,
+                'Mod-Name': 'SuperFastMath',
+                'Mixin-Configs': 'superfastmath.mixins.json'
         )
     }
+
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
 tasks.named('processResources') {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    from('src/main/resources') {
-        include 'superfastmath.mixins.json'
-        include 'META-INF/neoforge.mods.toml'
-        expand('version': project.version)
+
+    var replaceProperties = [
+            'version': project.version,
+            'mod_version': project.mod_version,
+            'file.jarVersion': project.mod_version,
+            'minecraft_version': project.minecraft_version,
+            'neoforge_version': project.neoforge_version
+    ]
+    inputs.properties replaceProperties
+
+    from('src/main/resources')
+
+    filesMatching('META-INF/neoforge.mods.toml') {
+        expand replaceProperties
     }
 }
 
@@ -92,6 +118,7 @@ publishing {
             from components.java
         }
     }
+
     repositories {
         maven {
             url = uri(layout.buildDirectory.dir("repo"))

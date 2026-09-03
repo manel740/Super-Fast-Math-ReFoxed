@@ -1,23 +1,26 @@
 modLoader="javafml"
 loaderVersion="[4.0,)"
 license="MIT"
-issueTrackerURL="https://github.com/ItzjustElias/FastMathMod/issues"
+issueTrackerURL="https://github.com/manel740/Super-Fast-Math-ReFoxed/issues"
 
 [[mods]]
 modId="superfastmath"
-version="${file.jarVersion}"
+version="${mod_version}"
 displayName="SuperFastMath"
-displayURL="https://github.com/ItzjustElias/FastMathMod/"
-credits="Ported to NeoForge by maintaining original optimizations"
-authors="Elias"
-description='''This mod uses precomputed sin and cos via a table and sets them dynamically, which makes math way faster.
+logoFile="logo.png"
+displayURL="https://github.com/manel740/Super-Fast-Math-ReFoxed"
+credits="Original Fast Math by EliasB; NeoForge port maintained by manel740"
+authors="manel740"
+description='''
+This mod optimizes commonly used mathematical operations in Minecraft.
 
 Optimizations:
-- Faster sine & cosine via optimized lookup tables
-- Hardware-accelerated square root (native SQRTSS instruction)
+- Faster sine and cosine via optimized lookup tables
+- Hardware-accelerated square root where applicable
 - Improved floor and clamp operations
 - Optimized interpolation (lerp) using fused multiply-add
-- BlockPos bit-packing for faster chunk coordinate encoding'''
+- Optimized BlockPos bit-packing for faster chunk coordinate encoding
+'''
 
 [[dependencies.superfastmath]]
 modId="neoforge"
@@ -25,8 +28,6 @@ mandatory=true
 versionRange="[21.1,)"
 ordering="NONE"
 side="BOTH"
-
-# No Fabric API dependency needed - mod uses only vanilla/NeoForge APIs
 
 [[dependencies.superfastmath]]
 modId="minecraft"
