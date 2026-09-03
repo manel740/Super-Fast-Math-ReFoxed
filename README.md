@@ -1,160 +1,92 @@
-<div align="center">
+# Fast Math — NeoForge
 
-# ⚡ Fast Math — NeoForge
-
-**A high-performance mathematical optimization mod for Minecraft**
-
-A NeoForge port of **Fast Math**, originally created by **EliasB**.
-
-[![Minecraft](https://img.shields.io/badge/Minecraft-1.21.1-62B47A?logo=minecraft\&logoColor=white)](https://www.minecraft.net/)
-[![NeoForge](https://img.shields.io/badge/NeoForge-1.21.1-262626?logo=neoforge\&logoColor=white)](https://neoforged.net/)
+[![Minecraft](https://img.shields.io/badge/Minecraft-1.21.1-62B47A?logo=minecraft&logoColor=white)](https://www.minecraft.net/)
+[![NeoForge](https://img.shields.io/badge/NeoForge-1.21.1-262626?logo=neoforge&logoColor=white)](https://neoforged.net/)
 [![Environment](https://img.shields.io/badge/environment-client%20%2B%20server-1976d2)](https://neoforged.net/)
-[![Java](https://img.shields.io/badge/Java-21-orange?logo=openjdk\&logoColor=white)](https://adoptium.net/)
+[![Java](https://img.shields.io/badge/Java-21-orange?logo=openjdk&logoColor=white)](https://adoptium.net/)
 
-</div>
-
----
-
-## 📖 About
-
-**Fast Math** is a lightweight Minecraft optimization mod focused on improving the performance of frequently executed mathematical operations and low-level game logic.
-
-Minecraft performs mathematical calculations constantly across systems such as:
-
-* Entity movement and AI
-* Entity orientation
-* Collision detection
-* Chunk and block coordinate calculations
-* Redstone logic
-* World simulation
-* Interpolation and movement calculations
-
-Fast Math replaces selected mathematical operations with optimized implementations designed to reduce computational overhead while preserving Minecraft's expected behavior.
-
-> **This repository is an independent NeoForge port of the original Fast Math mod created by EliasB.**
+A NeoForge port of Fast Math (originally released as Super Fast Math), created by EliasB. This repository adapts the original Fabric mod to run on NeoForge for Minecraft 1.21.1.
 
 ---
 
-## ⚡ Optimizations
+## About
 
-Fast Math targets several mathematical operations that are frequently executed during Minecraft's game loop.
+Fast Math is a lightweight optimization mod focused on improving the performance of frequently executed mathematical operations and low-level game logic in Minecraft.
 
-### Trigonometric Functions
+Instead of relying solely on default implementations, the mod replaces several frequently used math functions and systems with faster alternatives, targeting areas such as:
 
-Optimized implementations for frequently used:
+- Entity movement and AI
+- Entity orientation
+- Collision detection
+- Chunk and block coordinate calculations
+- Redstone logic
+- World simulation
+- Interpolation and movement calculations
 
-* Sine
-* Cosine
-
-These operations can be called thousands of times during normal gameplay, particularly by entities and game logic.
-
-### Square Root
-
-Uses a hardware-accelerated square-root implementation where applicable, reducing the cost of repeated square-root calculations.
-
-### Floor & Clamp
-
-Optimized implementations for commonly used:
-
-* Floor operations
-* Clamp operations
-
-### Entity Orientation
-
-Fast mathematical operations can benefit systems that frequently calculate entity orientation and movement.
-
-> **Note:** The `atan2` optimization was reverted to exact mathematical behavior to avoid potential projectile-angle inaccuracies.
-
-### Interpolation
-
-Optimized interpolation (`lerp`) using fused multiply-add operations where applicable.
-
-### BlockPos
-
-Optimized `BlockPos` bit-packing operations used for encoding and decoding block/chunk coordinates.
+This repository is an independent NeoForge port of the original Fast Math mod created by EliasB. It is not an official release from the original author.
 
 ---
 
-## 📊 Performance
+## What It Optimizes
 
-The original Fast Math project was benchmarked under a heavily stressed Minecraft environment involving:
+- Faster sine and cosine via optimized lookup tables
+- Hardware-accelerated square root (native SQRTSS instruction where applicable)
+- Improved floor and clamp operations
+- Optimized interpolation (`lerp`) using fused multiply-add operations
+- `BlockPos` bit-packing for faster block/chunk coordinate encoding and decoding
 
-* A superflat world
-* 200 zombies performing pathfinding
-* Active redstone
-* `randomTickSpeed 1000`
-* Spark performance profiling
-
-### Original Project Benchmark
-
-| Metric          | Vanilla | SuperFastMath | Improvement |
-| --------------- | ------: | ------------: | ----------: |
-| TPS — 1 minute  |   14.13 |         20.00 |    **+41%** |
-| TPS — 5 minutes |   14.94 |         19.88 |    **+33%** |
-| MSPT median     | 51.4 ms |       43.4 ms |   **−8 ms** |
-| MSPT max spike  |  202 ms |        153 ms |    **−24%** |
-
-> **Important:** These benchmarks originate from the original Fast Math project and should not be interpreted as benchmarks of this NeoForge port.
-
-### Original Test Environment
-
-* **Minecraft:** 26.1.2
-* **Loader:** Fabric
-* **Java:** 25
-* **CPU:** Intel Core i5-12400F
-* **Profiler:** Spark
-
-Actual performance improvements may vary significantly depending on CPU, Minecraft version, world conditions, entity count, and installed mods.
+> Note: the `atan2` optimization used for entity orientation was reverted to exact mathematical behavior, in both the original mod and this port, to avoid projectile-angle inaccuracies.
 
 ---
 
-## 🚀 Why Fast Math?
+## Benchmarks
 
-Minecraft's game engine performs mathematical operations continuously.
+The original Fast Math project was benchmarked on a superflat world with 200 zombies performing pathfinding, active redstone, `/gamerule randomTickSpeed 1000`, and Spark profiling.
 
-Optimizing frequently executed operations can reduce CPU overhead and improve the amount of time available for other game logic.
+| Metric | Vanilla | Fast Math | Improvement |
+|--------|--------:|----------:|------------:|
+| TPS (1 min) | 14.13 | 20.00 | +41% |
+| TPS (5 min) | 14.94 | 19.88 | +33% |
+| MSPT median | 51.4 ms | 43.4 ms | -8 ms |
+| MSPT max spike | 202 ms | 153 ms | -24% |
 
-Fast Math can particularly benefit workloads involving:
+Original test environment: Minecraft 26.1.2, Fabric, Java 25, Intel Core i5-12400F, profiled with Spark.
 
-* 🧠 Entity AI and movement
-* 🧭 Entity orientation
-* 🌍 World simulation
-* 🧱 Block and chunk coordinate calculations
-* 🔴 Redstone systems
-* 💥 Collision calculations
-* 🔄 Interpolation and movement
-* 🐄 Large numbers of entities
-* 🏭 Mob farms and technical Minecraft environments
-
-Both **client and server environments** can benefit from these optimizations.
-
-Server operators running heavily simulated worlds or large entity populations may see the greatest impact.
+These benchmarks come from the original Fast Math (Fabric) project and are not benchmarks of this NeoForge port. Actual results may vary depending on CPU, Minecraft version, world conditions, entity count, and installed mods.
 
 ---
 
-## 📦 Supported Versions
+## Why Fast Math?
 
-| Minecraft  | Loader       | Environment     | Status      |
-| ---------- | ------------ | --------------- | ----------- |
-| **1.21.1** | **NeoForge** | Client + Server | ✅ Supported |
+Minecraft performs mathematical calculations continuously across systems such as entity AI and movement, entity orientation, world simulation, block and chunk coordinate math, redstone, collision detection, and interpolation.
+
+Optimizing these frequently executed operations reduces CPU overhead and frees up time for other game logic. Both client and server environments benefit, and server operators running mob farms, technical builds, or large entity counts are likely to see the greatest impact.
+
+---
+
+## Supported Versions
+
+| Minecraft | Loader | Environment | Status |
+|-----------|--------|-------------|--------|
+| 1.21.1 | NeoForge | Client + Server | Supported |
 
 Additional Minecraft versions may be supported in the future.
 
 ---
 
-## 🔧 Installation
+## Installation
 
 ### Requirements
 
-* Minecraft **1.21.1**
-* **NeoForge** for Minecraft 1.21.1
-* Java **21**
+- Minecraft 1.21.1
+- NeoForge for Minecraft 1.21.1
+- Java 21
 
-### Installation
+### Steps
 
-1. Install Minecraft **1.21.1**.
-2. Install the appropriate **NeoForge** version.
-3. Download the latest **Fast Math — NeoForge** `.jar`.
+1. Install Minecraft 1.21.1.
+2. Install the appropriate NeoForge version.
+3. Download the latest Fast Math — NeoForge `.jar`.
 4. Place the `.jar` inside your Minecraft `mods` folder.
 5. Start Minecraft using the NeoForge profile.
 
@@ -162,74 +94,58 @@ No additional configuration is required.
 
 ---
 
-## 🧩 Compatibility
+## Compatibility
 
-Fast Math is designed to be lightweight and can be used alongside other performance and optimization mods.
+Fast Math is lightweight and designed to work alongside other performance and optimization mods, including Sodium, other rendering optimizations, server performance mods, and general-purpose optimization mods.
 
-It is intended to coexist with mods such as:
+Compatibility can still vary depending on Minecraft version, NeoForge version, mappings, and other installed mods. If you run into an incompatibility, please open an issue with as much detail as possible.
 
-* Sodium
-* Other rendering optimizations
-* Server performance mods
-* General-purpose optimization mods
+Please include:
 
-However, compatibility can vary depending on the Minecraft version, NeoForge version, mappings, and other installed mods.
-
-If you encounter an incompatibility, please report it with as much information as possible.
-
-### Please include
-
-* Minecraft version
-* NeoForge version
-* Fast Math version
-* Java version
-* List of installed mods
-* Complete crash report
-* Relevant log output
+- Minecraft version
+- NeoForge version
+- Fast Math version
+- Java version
+- List of installed mods
+- Complete crash report
+- Relevant log output
 
 ---
 
-## ⚙️ Technical Details
+## Technical Details
 
-Fast Math modifies selected Minecraft mathematical and coordinate-related implementations using **Mixin**.
+Fast Math modifies selected Minecraft mathematical and coordinate-related implementations using Mixin, targeting classes including `Mth` and `BlockPos`.
 
-The original implementation targets systems including:
+The original mod was built for Fabric. This NeoForge port adapts the required loader-specific integration while preserving the optimization goals of the original project.
 
-* `Mth`
-* `BlockPos`
+Design goals:
 
-The NeoForge port adapts the required loader-specific integration while maintaining the optimization goals of the original project.
+- Minimize computational overhead
+- Preserve vanilla behavior
+- Avoid unnecessary configuration
+- Keep the mod lightweight
+- Provide optimizations that are transparent to the user
 
-### Design Goals
-
-The project aims to:
-
-* Minimize computational overhead
-* Preserve vanilla behavior
-* Avoid unnecessary configuration
-* Keep the mod lightweight
-* Provide optimizations that are transparent to the user
-
-Fast Math is designed as a **zero-configuration optimization mod**.
+Fast Math is designed as a zero-configuration optimization mod, and works on both the client and server side.
 
 ---
 
-## 🛠️ Development
+## Development
 
-This project is developed for **NeoForge** using **Java 21**.
+This project is developed for NeoForge using Java 21.
 
 ### Requirements
 
-* Java 21
-* Git
-* IntelliJ IDEA or another Java IDE
-* Minecraft 1.21.1 NeoForge development environment
+- Java 21
+- Git
+- IntelliJ IDEA or another Java IDE
+- Minecraft 1.21.1 NeoForge development environment
 
 ### Clone the repository
 
 ```bash
 git clone https://github.com/manel740/Super-Fast-Math-ReFoxed.git
-cd YOUR_REPOSITORY
+cd Super-Fast-Math-ReFoxed
 ```
 
 ### Build
@@ -254,69 +170,33 @@ build/libs/
 
 ---
 
-## 📜 Credits
+## Credits
 
-### Original Fast Math
+Fast Math (originally Super Fast Math) was created by EliasB. The original creator deserves credit for the concept, original implementation, optimizations, and the underlying work this port is based on.
 
-**Fast Math** was originally created by **EliasB**.
+Original creator: EliasB
+[EliasB — CurseForge Profile](https://www.curseforge.com/members/eliasb/projects)
 
-The original creator deserves credit for the concept, original implementation, optimizations, and underlying work on which this port is based.
-
-**Original creator:** EliasB
-
-[EliasB — CurseForge Profile](https://www.curseforge.com/members/eliasb/projects?utm_source=chatgpt.com)
+For the original project, releases, and documentation, refer to EliasB's own pages.
 
 ---
 
-## 🔗 Original Project
+## License
 
-For the original Fast Math project, releases, documentation, and information about the original implementation, please refer to the original project maintained by EliasB.
+Refer to the license of the original Fast Math / Super Fast Math project for the licensing terms applicable to the original code. This repository contains the NeoForge-specific changes required for the port.
 
-[EliasB's CurseForge Projects](https://www.curseforge.com/members/eliasb/projects?utm_source=chatgpt.com)
-
----
-
-## 📄 License
-
-Please refer to the license of the original Fast Math project for the licensing terms applicable to the original code.
-
-This repository contains NeoForge-specific modifications required for the port.
-
-If you intend to:
-
-* Redistribute this project
-* Publish modified versions
-* Include the code in another project
-* Create derivative works
-
-please verify that your use complies with the original project's license and any applicable terms.
+If you intend to redistribute this project, publish modified versions, include the code in another project, or create derivative works, please verify that your use complies with the original project's license and any applicable terms.
 
 ---
 
-## ⚠️ Disclaimer
+## Disclaimer
 
-This repository is a **community-made NeoForge port** of Fast Math.
+This repository is a community-made NeoForge port of Fast Math / Super Fast Math. The mod and its original implementation were created by EliasB.
 
-**Fast Math and its original implementation were created by EliasB.**
-
-This project is **not affiliated with, endorsed by, or officially maintained by EliasB**, unless explicitly stated otherwise.
-
-The NeoForge port should not be interpreted as the original author's official release.
+This project is not affiliated with, endorsed by, or officially maintained by EliasB unless explicitly stated otherwise. This NeoForge port should not be interpreted as an official release from the original author.
 
 ---
 
-## ❤️ Acknowledgements
+## Acknowledgements
 
-Special thanks to **EliasB** for creating Fast Math and making the original project available to the Minecraft modding community.
-
-This NeoForge port exists to make the project's optimization approach available to **NeoForge players and server administrators**.
-
----
-
-<div align="center">
-
-**Fast Math — NeoForge**
-
-*Optimize the math. Keep the game moving.*
-
-</div>
+Thanks to EliasB for creating Fast Math and making the original project available to the Minecraft modding community. This NeoForge port exists to bring the same optimization approach to NeoForge players and server administrators.
